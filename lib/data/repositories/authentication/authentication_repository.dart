@@ -85,17 +85,9 @@ class AuthenticationRepository extends GetxController {
   /* ---------------------------- Email & Password sign-in ---------------------------------*/
 
   /// [EmailAuthentication] - SignIn
-
-  Future<UserCredential> loginWithEmailAndPassword(
-    String email,
-    String password,
-  ) async {
-    print("Login with email:  and password:");
+  Future<UserCredential> loginWithEmailAndPassword(String email, String password) async {
     try {
-      return await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      return await _auth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
       throw TFirebaseAuthException(e.code).message;
     } on FirebaseException catch (e) {
@@ -110,15 +102,9 @@ class AuthenticationRepository extends GetxController {
   }
 
   /// [EmailAuthentication] - REGISTER
-  Future<UserCredential> registerWithEmailAndPassword(
-    String email,
-    String password,
-  ) async {
+  Future<UserCredential> registerWithEmailAndPassword(String email, String password) async {
     try {
-      return await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      return await _auth.createUserWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
       throw TFirebaseAuthException(e.code).message;
     } on FirebaseException catch (e) {
@@ -133,16 +119,10 @@ class AuthenticationRepository extends GetxController {
   }
 
   /// [ReAuthenticate] - ReAuthenticate User
-  Future<void> reAuthenticateWithEmailAndPassword(
-    String email,
-    String password,
-  ) async {
+  Future<void> reAuthenticateWithEmailAndPassword(String email, String password) async {
     try {
       // Create a credential
-      AuthCredential credential = EmailAuthProvider.credential(
-        email: email,
-        password: password,
-      );
+      AuthCredential credential = EmailAuthProvider.credential(email: email, password: password);
 
       // ReAuthenticate
       await _auth.currentUser!.reauthenticateWithCredential(credential);
@@ -202,14 +182,10 @@ class AuthenticationRepository extends GetxController {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
       // Obtain the auth details from the request
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
+      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
       // Create a new credential
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
+      final credential = GoogleAuthProvider.credential(accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
 
       // Once signed in, return the UserCredential
       return await FirebaseAuth.instance.signInWithCredential(credential);
@@ -242,23 +218,14 @@ class AuthenticationRepository extends GetxController {
 
           if (e.code == 'too-many-requests') {
             Get.offAllNamed(TRoutes.welcome);
-            TLoaders.warningSnackBar(
-              title: TTexts.tooManyAttempts.tr,
-              message: TTexts.tooManyAttemptsMessage.tr,
-            );
+            TLoaders.warningSnackBar(title: TTexts.tooManyAttempts.tr, message: TTexts.tooManyAttemptsMessage.tr);
             return;
           } else if (e.code == 'unknown') {
             Get.back(result: false);
-            TLoaders.warningSnackBar(
-              title: TTexts.smaNotSent.tr,
-              message: TTexts.smaNotSentMessage.tr,
-            );
+            TLoaders.warningSnackBar(title: TTexts.smaNotSent.tr, message: TTexts.smaNotSentMessage.tr);
             return;
           }
-          TLoaders.warningSnackBar(
-            title: TTexts.ohSnap.tr,
-            message: e.message ?? '',
-          );
+          TLoaders.warningSnackBar(title: TTexts.ohSnap.tr, message: e.message ?? '');
         },
         codeSent: (verificationId, resendToken) {
           print('--------------- codeSent');
@@ -295,10 +262,7 @@ class AuthenticationRepository extends GetxController {
   /// [PhoneAuthentication] - VERIFY PHONE NO BY OTP
   Future<bool> verifyOTP(String otp, String phoneNumber) async {
     try {
-      final phoneCredentials = PhoneAuthProvider.credential(
-        verificationId: phoneNoVerificationId.value,
-        smsCode: otp,
-      );
+      final phoneCredentials = PhoneAuthProvider.credential(verificationId: phoneNoVerificationId.value, smsCode: otp);
       var credentials = await _auth.signInWithCredential(phoneCredentials);
       return credentials.user != null ? true : false;
     } on FirebaseAuthException catch (e) {

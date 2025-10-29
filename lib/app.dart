@@ -15,30 +15,24 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final langController = Get.put(LanguageController(), permanent: true);
+    final langController = Get.find<LanguageController>();
+    return GetMaterialApp(
+      title: TTexts.appName,
+      locale: langController.selectedLocale.value,
+      translations: Languages(),
+      fallbackLocale: const Locale('en', 'US'),
+      theme: TAppTheme.lightTheme,
+      themeMode: ThemeMode.system,
+      darkTheme: TAppTheme.darkTheme,
+      debugShowCheckedModeBanner: false,
+      initialBinding: GeneralBindings(),
+      localizationsDelegates: const [
+        quill.FlutterQuillLocalizations.delegate,
+      ],
+      getPages: AppRoutes.pages,
 
-    return Obx(
-      () => GetMaterialApp(
-        title: TTexts.appName,
-        locale: langController.selectedLocale.value,
-        translations: Languages(),
-        fallbackLocale: const Locale('en', 'US'),
-        theme: TAppTheme.lightTheme,
-        themeMode: ThemeMode.system,
-        darkTheme: TAppTheme.darkTheme,
-        debugShowCheckedModeBanner: false,
-        initialBinding: GeneralBindings(),
-        localizationsDelegates: const [
-          quill.FlutterQuillLocalizations.delegate,
-        ],
-        getPages: AppRoutes.pages,
-
-        /// Loader screen while deciding which screen to show
-        home: const Scaffold(
-          backgroundColor: TColors.primary,
-          body: Center(child: CircularProgressIndicator(color: Colors.white)),
-        ),
-      ),
+      /// Show Loader or Circular Progress Indicator meanwhile Authentication Repository is deciding to show relevant screen.
+      home: const Scaffold(backgroundColor: TColors.primary, body: Center(child: CircularProgressIndicator(color: Colors.white))),
     );
   }
 }

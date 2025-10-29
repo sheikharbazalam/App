@@ -58,7 +58,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCAYIKkQt7QUT_laV-pHOwLd15Ohhx48vQ',
-    appId: '1:1015472509991:android:99a9ee2943e5d6d6432a02',
+    appId: '1:1015472509991:android:0d699a6337975b94432a02',
     messagingSenderId: '1015472509991',
     projectId: 'ecommerce-fc421',
     storageBucket: 'ecommerce-fc421.firebasestorage.app',
@@ -66,13 +66,14 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBShklLEui9EC7RujEidNJi1LbBW2ZGzzM',
-    appId: '1:1015472509991:ios:89fa49b0ec6a16e1432a02',
+    appId: '1:1015472509991:ios:9c49f7778204745c432a02',
     messagingSenderId: '1015472509991',
     projectId: 'ecommerce-fc421',
     storageBucket: 'ecommerce-fc421.firebasestorage.app',
-    iosClientId:
-        '1015472509991-hi93p1i0nrg3eg43mpatlv268kmnn3t7.apps.googleusercontent.com',
-    iosBundleId: 'com.codingwitht.ecommerce.tstoreEcommerceApp',
+    androidClientId: '1015472509991-3olr7be3n4btmosl11nr0sq0crt5vqe3.apps.googleusercontent.com',
+    iosClientId: '1015472509991-buvc9r9c26ub30g9q85uqrj7pglnlksn.apps.googleusercontent.com',
+    iosBundleId: 'com.mobijunction.app',
   );
+
 }
 //com.MobiJunction.ecommerce

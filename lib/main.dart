@@ -5,7 +5,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-
 import 'app.dart';
 import 'data/repositories/authentication/authentication_repository.dart';
 import 'data/services/razorpay/razorpay_service.dart';
@@ -13,47 +12,35 @@ import 'features/personalization/controllers/language_controller.dart';
 import 'firebase_options.dart';
 import 'utils/constants/api_constants.dart';
 
-/// Entry point of the Flutter App with robust initialization
+/// -- Entry point of Flutter App
 Future<void> main() async {
-  final WidgetsBinding widgetsBinding =
-      WidgetsFlutterBinding.ensureInitialized();
+  final WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
-  // Keep splash screen visible until initialization completes
+  /// -- GetX Local Storage
+  await GetStorage.init();
+
+  /// -- Overcome from transparent spaces at the bottom in iOS full Mode
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+
+  /// -- Await Splash until other items Load
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  try {
-    debugPrint('🔹 Initializing local storage...');
-    await GetStorage.init();
+  /// -- Stripe Configuration
+  /// -- Warning: Do not use Secret Key here.
+  /// -- Update Key in Your Stripe Cloud Function in Admin Panel
+  Stripe.publishableKey = TAPIs.stripePublishableKey;
+  await Stripe.instance.applySettings();
 
-    // Optional system UI setup
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-
-    // Initialize Firebase safely
-    debugPrint('🔹 Initializing Firebase...');
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    debugPrint('✅ Firebase initialized');
-
-    // Setup Stripe (non-blocking)
-    debugPrint('🔹 Setting up Stripe...');
-    Stripe.publishableKey = TAPIs.stripePublishableKey;
-    await Stripe.instance.applySettings();
-    debugPrint('✅ Stripe initialized');
-
-    // Register dependencies lazily (loads only when used)
-    debugPrint('🔹 Setting up GetX controllers...');
+  /// -- Initialize Firebase & Authentication Repository
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform).then((FirebaseApp value) {
     Get.lazyPut(() => LanguageController(), fenix: true);
-    Get.lazyPut(() => AuthenticationRepository(), fenix: true);
-    Get.lazyPut(() => RazorpayService(), fenix: true);
-    debugPrint('✅ Controllers registered');
-  } catch (e, stackTrace) {
-    debugPrint('❌ Error during app initialization: $e');
-    debugPrintStack(stackTrace: stackTrace);
-  } finally {
-    // Always remove splash, even if initialization fails
-    FlutterNativeSplash.remove();
-  }
+    return Get.put(AuthenticationRepository());
+  });
 
+  /// -- Initialize RazorpayService
+  Get.put(RazorpayService());
+
+
+  /// -- Main App Starts here...
   runApp(const App());
 }
