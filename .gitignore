@@ -9,3 +9,15 @@ android/app/key.properties
 *.jks
 *.keystore
 
+
+# Firebase
+**/google-services.json
+**/GoogleService-Info.plist
+
+# macOS
+.DS_Store
+
+# Xcode
+build/
+DerivedData/
+
