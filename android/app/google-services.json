@@ -1,0 +1,106 @@
+{
+  "project_info": {
+    "project_number": "1015472509991",
+    "project_id": "ecommerce-fc421",
+    "storage_bucket": "ecommerce-fc421.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015472509991:android:0d699a6337975b94432a02",
+        "android_client_info": {
+          "package_name": "com.codingwitht.ecommerce.tstore_ecommerce_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1015472509991-5nlnt843hvgmdng4gtrdh746i5f6avpu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.codingwitht.ecommerce.tstore_ecommerce_app",
+            "certificate_hash": "2252a8a668beb1cd789abcade8fd75dac01d2509"
+          }
+        },
+        {
+          "client_id": "1015472509991-8ij9vnuhjvtt0qubjl5dkp4c1ad55525.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAYIKkQt7QUT_laV-pHOwLd15Ohhx48vQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1015472509991-8ij9vnuhjvtt0qubjl5dkp4c1ad55525.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1015472509991-buvc9r9c26ub30g9q85uqrj7pglnlksn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mobijunction.app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015472509991:android:b2f023e16e9a5dd0432a02",
+        "android_client_info": {
+          "package_name": "com.example.cwt_ecommerce_admin_panel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1015472509991-3olr7be3n4btmosl11nr0sq0crt5vqe3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cwt_ecommerce_admin_panel",
+            "certificate_hash": "a55b116a01f1d798f8e88b8e634cab2a08eb9198"
+          }
+        },
+        {
+          "client_id": "1015472509991-u90g4gh184sog90krlp07ed5h3psdnhh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cwt_ecommerce_admin_panel",
+            "certificate_hash": "3a30607f8b791f960c6e402ffc859293183ce2cd"
+          }
+        },
+        {
+          "client_id": "1015472509991-8ij9vnuhjvtt0qubjl5dkp4c1ad55525.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAYIKkQt7QUT_laV-pHOwLd15Ohhx48vQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1015472509991-8ij9vnuhjvtt0qubjl5dkp4c1ad55525.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1015472509991-buvc9r9c26ub30g9q85uqrj7pglnlksn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mobijunction.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
