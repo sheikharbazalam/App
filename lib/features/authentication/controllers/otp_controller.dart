@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../data/repositories/authentication/authentication_repository.dart';
@@ -7,6 +8,11 @@ import '../../../utils/constants/text_strings.dart';
 import '../../../utils/helpers/network_manager.dart';
 import '../../../utils/popups/full_screen_loader.dart';
 import '../../../utils/popups/loaders.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+
+
+String? _verificationId; // store Firebase verification ID
 
 class OTPController extends GetxController {
   static OTPController get instance => Get.find();
@@ -53,10 +59,41 @@ class OTPController extends GetxController {
         }
       });
     } catch (e) {
-      TLoaders.errorSnackBar(title: TTexts.ohSnap.tr, message: e.toString());
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+  TLoaders.errorSnackBar(title: TTexts.ohSnap.tr, message: e.toString());
+});
+
     }
   }
+//function to send otp 
+Future<void> sendOTP(String phoneNumber) async {
+  try {
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      timeout: const Duration(seconds: 60),
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        // Optional: auto sign-in
+        await FirebaseAuth.instance.signInWithCredential(credential);
+        TLoaders.successSnackBar(title: "Success", message: "Phone auto-verified!");
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        TLoaders.warningSnackBar(title: "Error", message: e.message ?? "Failed to send OTP");
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        _verificationId = verificationId; // <-- store verification ID
+        TLoaders.successSnackBar(title: "OTP Sent", message: "OTP sent to $phoneNumber");
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        _verificationId = verificationId; // <-- also store on timeout
+      },
+    );
+  } catch (e) {
+    TLoaders.warningSnackBar(title: "Error", message: e.toString());
+  }
+}
+//sending otp function end here
 
+  /// -- RESEND OTP
   Future<void> resendOTP() async {
     try {
       // Trigger the OTP resend logic
@@ -67,12 +104,15 @@ class OTPController extends GetxController {
 
       startTimer(); // Restart the timer
     } catch (e) {
-      TLoaders.errorSnackBar(title: TTexts.unableToSendOTP.tr, message: e.toString());
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+  TLoaders.errorSnackBar(title: TTexts.ohSnap.tr, message: e.toString());
+});
+
     }
   }
 
   /// -- SIGNUP
-  Future<void> verifyOTP() async {
+ /* Future<void> verifyOTP() async {
     try {
       if (otp.isEmpty) return;
 
@@ -95,5 +135,37 @@ class OTPController extends GetxController {
       TFullScreenLoader.stopLoading();
       TLoaders.warningSnackBar(title: TTexts.ohSnap, message: e.toString());
     }
+  }*/
+  Future<void> verifyOTP() async {
+  try {
+    if (otp.isEmpty) return;
+
+    TFullScreenLoader.popUpCircular();
+
+    final isConnected = await NetworkManager.instance.isConnected();
+    if (!isConnected) {
+      TFullScreenLoader.stopLoading();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        TLoaders.warningSnackBar(title: TTexts.ohSnap, message: "No Internet Connection");
+      });
+      return;
+    }
+
+    // Verify OTP via your repository
+    var isVerified = await AuthenticationRepository.instance.verifyOTP(
+      otp,
+      phoneNumberWithCountryCode.value,
+    );
+
+    TFullScreenLoader.stopLoading();
+    Get.back(result: isVerified); // return to previous screen
+  } catch (e) {
+    TFullScreenLoader.stopLoading();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      TLoaders.warningSnackBar(title: TTexts.ohSnap, message: e.toString());
+    });
   }
+}
+
+
 }

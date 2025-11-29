@@ -20,6 +20,7 @@ import '../models/user_model.dart';
 import '../screens/profile/re_authenticate_user_login_form.dart';
 import 'settings_controller.dart';
 
+
 /// Controller to manage user-related functionality.
 class UserController extends GetxController {
   static UserController get instance => Get.find();
@@ -82,7 +83,13 @@ class UserController extends GetxController {
           final nameParts = UserModel.nameParts(userCredentials.user!.displayName ?? '');
           final customUsername = UserModel.generateUsername(userCredentials.user!.displayName ?? '');
 
-          final token = await TNotificationService.getToken();
+          //final token = await TNotificationService.getToken();
+          //my chnages
+          //final token = await TNotificationService.getToken() ?? '';
+          final String? token = await TNotificationService.getToken();
+
+
+
 
           // Map data
           final newUser = UserModel(
@@ -92,7 +99,7 @@ class UserController extends GetxController {
             userName: customUsername,
             email: userCredentials.user!.email ?? '',
             profilePicture: userCredentials.user!.photoURL ?? '',
-            deviceToken: token,
+            deviceToken: token ?? '',
             isEmailVerified: true,
             isProfileActive: true,
             updatedAt: DateTime.now(),
@@ -140,7 +147,9 @@ class UserController extends GetxController {
       user.value.deviceToken = newToken;
       user.refresh();
     } catch (e) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title: 'Error', message: 'Failed to update user record: $e');
+    });
     }
   }
 
@@ -159,7 +168,9 @@ class UserController extends GetxController {
       user.value.pin = pin;
       user.refresh();
     } catch (e) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title: TTexts.error.tr, message: '${TTexts.failedToUpdateUserRecord.tr}: $e');
+    });
     }
   }
 
@@ -201,7 +212,9 @@ class UserController extends GetxController {
       });
       user.refresh();
     } catch (e) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title: 'Error', message: '${TTexts.failToUpdateUserRecord.tr} $e');
+    });
     }
   }
 
@@ -222,7 +235,9 @@ class UserController extends GetxController {
       user.value.points = points;
       user.refresh();
     } catch (e) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title: 'Error', message: '${TTexts.failToUpdateUserRecord.tr} $e');
+    });
     }
   }
 
@@ -243,7 +258,9 @@ class UserController extends GetxController {
       user.value.points = points;
       user.refresh();
     } catch (e) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title: 'Error', message: '${TTexts.failToUpdateUserRecord.tr} $e');
+    });
     }
   }
 
@@ -265,7 +282,9 @@ class UserController extends GetxController {
       }
     } catch (e) {
       imageUploading.value = false;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title:  TTexts.ohSnap.tr, message: '${TTexts.somethingWentWrong.tr} $e');
+    });
     }
   }
 
@@ -361,7 +380,9 @@ class UserController extends GetxController {
         cancel: OutlinedButton(child: Text(TTexts.cancel.tr), onPressed: () => Navigator.of(Get.overlayContext!).pop()),
       );
     } catch (e) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title: TTexts.ohSnap.tr, message: e.toString());
+    });
     }
   }
 }

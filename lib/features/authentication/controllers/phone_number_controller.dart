@@ -92,7 +92,9 @@ class SignInController extends GetxController {
     final isConnected = await NetworkManager.instance.isConnected();
     if (!isConnected) {
       TFullScreenLoader.stopLoading();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title: TTexts.noInternet.tr, message: TTexts.checkInternetConnection.tr);
+    });
       return false;
     }
     return true;
@@ -102,11 +104,16 @@ class SignInController extends GetxController {
   void _handleException(Object e) {
     // Stop loading dialog and show error message
     TFullScreenLoader.stopLoading();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
     TLoaders.errorSnackBar(title: TTexts.ohSnap, message: e.toString());
+  });
   }
 
   Future<void> registerUserInTheDatabase(String phoneNumber) async {
-    final token = await TNotificationService.getToken();
+   // final token = await TNotificationService.getToken();
+   //my chnages
+          final token = await TNotificationService.getToken() ?? '';
+
 
     // Save Authenticated user data in the Firebase Firestore
     final newUser = UserModel(

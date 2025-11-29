@@ -27,7 +27,7 @@ class UserModel {
 
   int points;
   int orderCount;
-  String deviceToken;
+  String? deviceToken;
 
   List<OrderModel>? orders;
   List<AddressModel>? addresses;
@@ -46,7 +46,7 @@ class UserModel {
     this.role = AppRole.user,
     this.createdAt,
     this.updatedAt,
-    this.deviceToken = '',
+    this.deviceToken,
     required this.isEmailVerified,
     required this.isProfileActive,
     this.points = 0,
@@ -142,7 +142,9 @@ class UserModel {
       // orderCount: data.containsKey('orderCount') ? data['orderCount'] ?? 0 : 0,
       points: (data['points'] ?? 0) is num ? (data['points'] as num).toInt() : 0,
       orderCount: (data['orderCount'] ?? 0) is num ? (data['orderCount'] as num).toInt() : 0,
-      deviceToken: data.containsKey('deviceToken') ? data['deviceToken'] ?? '' : '',
+      //deviceToken: data.containsKey('deviceToken') ? data['deviceToken'] ?? '' : '',
+      //my changes
+      deviceToken: data['deviceToken'],
       isEmailVerified: data.containsKey('isEmailVerified') ? data['isEmailVerified'] ?? false : false,
       isProfileActive: data.containsKey('isProfileActive') ? data['isProfileActive'] ?? false : false,
       reviewedProducts: data.containsKey('reviewedProducts') ? List<String>.from(data['reviewedProducts'] ?? []) : null,

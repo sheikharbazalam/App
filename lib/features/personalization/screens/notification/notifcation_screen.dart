@@ -20,7 +20,7 @@ class NotificationScreen extends StatelessWidget {
     final controller = NotificationController.instance;
 
     return Scaffold(
-      appBar: const TAppBar(title: Text('Notifications'), showSkipButton: false, showActions: false, showBackArrow: true),
+      appBar: const TAppBar(title: Text('Notifications'), showSkipButton: false, showActions: false, showBackArrow: true, showWhatsApp: true, whatsappPhone: '+91 8369273907', whatsappMessage: 'Hello, I have a query regarding notifications.'),
       body: Padding(
         padding: const EdgeInsets.all(TSizes.defaultSpace),
         child: Obx(() {

@@ -68,7 +68,9 @@ class ProductController extends GetxController {
       // Assign Products
       featuredProducts.assignAll(products);
     } catch (e) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title:TTexts.ohSnap.tr, message: e.toString());
+    });
     } finally {
       isLoading.value = false;
     }
@@ -89,7 +91,9 @@ class ProductController extends GetxController {
       // Assign Products
       mostViewedProducts.assignAll(products);
     } catch (e) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title:TTexts.ohSnap.tr, message: e.toString());
+    });
     } finally {
       isLoading.value = false;
     }
@@ -164,7 +168,9 @@ class ProductController extends GetxController {
         await productRepository.updateProduct(product);
       }
     } catch (e) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title: TTexts.ohSnap.tr, message: e.toString());
+    });
     }
   }
 

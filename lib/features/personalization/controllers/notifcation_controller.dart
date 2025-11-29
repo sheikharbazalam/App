@@ -1,6 +1,9 @@
+import 'package:flutter/material.dart';
+
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+
 import 'package:get/get.dart';
 
 import '../../../data/repositories/authentication/authentication_repository.dart';
@@ -44,7 +47,9 @@ class NotificationController extends GetxController {
       if (selectedNotification.value.id.isNotEmpty) await markNotificationAsViewed(selectedNotification.value);
     } catch (e) {
       if (kDebugMode) printError(info: e.toString());
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title: TTexts.ohSnap.tr, message: TTexts.unableToFetchNotification.tr);
+      });
     } finally {
       isLoading.value = false;
     }

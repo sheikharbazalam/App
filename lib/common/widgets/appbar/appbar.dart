@@ -1,3 +1,5 @@
+import '../../../utils/whatsapp_helper.dart';
+
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,6 +33,9 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.showSkipButton,
     this.actionIcon,
     this.actionOnPressed,
+    this.showWhatsApp = false, // ✅ default value
+    this.whatsappPhone,
+    this.whatsappMessage,
   });
 
   final Widget? title;
@@ -43,6 +48,9 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final VoidCallback? leadingOnPressed;
   final VoidCallback? actionOnPressed;
+  final bool showWhatsApp; // Add this
+  final String? whatsappPhone; // The number to chat with
+  final String? whatsappMessage; // Optional prefilled message
 
   @override
   Widget build(BuildContext context) {
@@ -55,10 +63,31 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
         backgroundColor: Colors.transparent,
         titleTextStyle: Theme.of(context).textTheme.headlineSmall,
         automaticallyImplyLeading: false,
-        leading:
+       /* leading:
             showBackArrow
                 ? IconButton(
-                  onPressed: () => Get.back(result: true),
+                  onPressed: () {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+                      if (Navigator.canPop(context)) {
+                        Get.back(result: true);
+                      }
+                    });
+                  },
+*/
+ leading: showBackArrow
+            ? IconButton(
+                onPressed: () {
+                  /// Close any active snackbar safely
+                  if (Get.isSnackbarOpen == true) {
+                    Get.closeCurrentSnackbar();
+                  }
+
+                  /// Use Navigator.pop instead of Get.back()
+                  if (Navigator.of(context).canPop()) {
+                    Navigator.of(context).pop(true);
+                  }
+                },
                   icon: Icon(Iconsax.arrow_left_24, color: dark ? TColors.light : TColors.dark),
                 )
                 : leadingIcon != null
@@ -75,9 +104,25 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ]
                 : showActions
-                ? (actions != null)
+                ? 
+                
+                (actions != null)
                     ? actions
                     : [
+
+                      if (showWhatsApp && whatsappPhone != null)
+              IconButton(
+                tooltip: 'Chat on WhatsApp',
+                onPressed: () => openWhatsApp(
+                  phone: whatsappPhone!,
+                  message: whatsappMessage ?? 'Hello, I have a query.',
+                ),
+                icon: Image.asset(
+  'assets/icons/whatsapp.png', // corrected name
+  width: 24,
+  height: 24,
+),
+              ),
                       showActionWithBadge
                           ? badges.Badge(
                             position: badges.BadgePosition.topEnd(top: 0, end: 0),

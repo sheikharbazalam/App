@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:t_utils/utils/constants/enums.dart';
@@ -72,7 +73,9 @@ class OrderController extends GetxController {
       if (selectedOrder.value.id.isEmpty) {
         Get.back();
       } else {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
         TLoaders.errorSnackBar(title: TTexts.ohSnap.tr, message: '${TTexts.unableFetchOrderDetail.tr} $e');
+      });
       }
     } finally {
       isLoading.value = false;
@@ -106,7 +109,9 @@ class OrderController extends GetxController {
   void processOrder(double subTotal) async {
     try {
       if (addressController.selectedAddress.value.id.isEmpty) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
         TLoaders.warningSnackBar(title: TTexts.addressRequired.tr, message: TTexts.addressRequiredMessage.tr);
+      });
         return;
       }
 
@@ -114,7 +119,9 @@ class OrderController extends GetxController {
 
       if (addressController.billingSameAsShipping.isFalse) {
         if (addressController.selectedBillingAddress.value.id.isEmpty) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
           TLoaders.warningSnackBar(title: TTexts.billingAddressRequired.tr, message: TTexts.billingAddressRequiredMessage.tr);
+          });
           return;
         }
       }
@@ -123,7 +130,9 @@ class OrderController extends GetxController {
       TFullScreenLoader.openLoadingDialog( TTexts.processingYourOrder.tr, TImages.pencilAnimation);
 
       // Get User Token
-      final token = await TNotificationService.getToken();
+      final token = await TNotificationService.getToken() ?? "";
+
+      
 
       final shipping = ShippingInfo(
         carrier: '',
@@ -231,10 +240,13 @@ class OrderController extends GetxController {
       TFullScreenLoader.stopLoading();
       final code = e.error.code;
       final message = e.error.localizedMessage;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title: 'Stripe: $code', message: message);
-    } catch (e) {
+    });
       TFullScreenLoader.stopLoading();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title:TTexts.ohSnap.tr, message: e.toString());
+    });
     }
   }
 
@@ -256,7 +268,9 @@ class OrderController extends GetxController {
   /// Method for cancelling order
   Future<void> cancelOrder(OrderModel order) async {
     await orderRepository.updateSingleField(order.id, {'orderStatus': OrderStatus.canceled.name, 'updatedAt': DateTime.now()});
+    WidgetsBinding.instance.addPostFrameCallback((_) {
     TLoaders.successSnackBar(title: TTexts.ohSnap.tr, message: TTexts.orderCancelled.tr);
+    });
     selectedOrder.refresh();
   }
 
@@ -301,7 +315,9 @@ class OrderController extends GetxController {
     };
 
     await OrderRepository.instance.updateSingleField(orderId, updatedOrder);
+  WidgetsBinding.instance.addPostFrameCallback((_) {  
 
     TLoaders.errorSnackBar(title: TTexts.paymentFailed.tr, message: errorDetails?['errorMessage'] ?? 'Unknown error');
+  });
   }
 }

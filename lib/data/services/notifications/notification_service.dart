@@ -61,12 +61,40 @@ class TNotificationService extends GetxService {
   }
 
   /// -- Get User's FCMToken
-  static Future<String> getToken() async {
+  /*static Future<String> getToken() async {
     await Future.delayed(const Duration(milliseconds: 5000)); // Optional delay
     final token = await FirebaseMessaging.instance.getToken();
     if (kDebugMode) print('FCM Token: $token');
     return token ?? '';
+  }*/
+  //My changes to wait for APN token which is required for FCM token on iOS
+  static Future<String?> getToken() async {
+  // iOS: wait for APNs token before getting FCM token
+  if (defaultTargetPlatform == TargetPlatform.iOS) {
+    String? apnsToken;
+    int retry = 0;
+
+    while (apnsToken == null && retry < 5) {
+      apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+      if (apnsToken == null) {
+        debugPrint('APNS token not ready, retrying...');
+        await Future.delayed(const Duration(seconds: 1));
+        retry++;
+      }
+    }
+
+    if (apnsToken == null) {
+      debugPrint('APNS token still null after retrying');
+      return null; // safely skip FCM token
+    }
   }
+
+  // Android & iOS (APNs ready)
+  final token = await FirebaseMessaging.instance.getToken();
+  if (kDebugMode) debugPrint('FCM Token: $token');
+  return token;
+}
+
 
   void _initializeLocalNotifications() {
     const AndroidInitializationSettings initializationSettingsAndroid =

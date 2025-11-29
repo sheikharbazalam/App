@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../data/repositories/categories/category_repository.dart';
@@ -44,7 +45,9 @@ class CategoryController extends GetxController {
       featuredCategories
           .assignAll(allCategories.where((category) => (category.isFeatured) && category.parentId.isEmpty).take(8).toList());
     } catch (e) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title: TTexts.ohSnap.tr, message: e.toString());
+    });
     } finally {
       isLoading.value = false;
     }
@@ -57,7 +60,9 @@ class CategoryController extends GetxController {
       final subCategories = await _categoryRepository.getSubCategories(categoryId);
       return subCategories;
     } catch (e) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+    });
       return [];
     }
   }

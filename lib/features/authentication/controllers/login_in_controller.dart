@@ -58,9 +58,12 @@ class LoginController extends GetxController {
       // Login user using EMail & Password Authentication
       final userCredentials = await AuthenticationRepository.instance.loginWithEmailAndPassword(email.text.trim(), password.text.trim());
 
-      final token = await TNotificationService.getToken();
+      //final token = await TNotificationService.getToken();
+      //my chnages
+          final String? token = await TNotificationService.getToken();
+
       final userController = Get.put(UserController());
-      await userController.updateUserRecordWithToken(token);
+      await userController.updateUserRecordWithToken(token!);
       // Assign user data to RxUser of UserController to use in app
       await userController.fetchUserRecord();
 
@@ -71,7 +74,9 @@ class LoginController extends GetxController {
       await AuthenticationRepository.instance.screenRedirect(userCredentials.user);
     } catch (e) {
       TFullScreenLoader.stopLoading();
+          WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title: TTexts.ohSnap.tr, message: e.toString());
+    });
     }
   }
 
@@ -103,7 +108,9 @@ class LoginController extends GetxController {
       await AuthenticationRepository.instance.screenRedirect(userCredentials?.user);
     } catch (e) {
       TFullScreenLoader.stopLoading();
+          WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title: TTexts.ohSnap.tr, message: e.toString());
+    });
     }
   }
 }

@@ -11,6 +11,8 @@ import '../../../../../utils/constants/text_strings.dart';
 import '../../../../personalization/controllers/settings_controller.dart';
 import '../../../../personalization/controllers/user_controller.dart';
 import '../../../../personalization/screens/profile/profile.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 class THomeAppBar extends StatelessWidget {
   const THomeAppBar({super.key});
@@ -55,8 +57,26 @@ class THomeAppBar extends StatelessWidget {
         ),
       ),
       actions: [
+         IconButton(
+    onPressed: () {
+      const whatsapp = "+918369273907"; // <-- replace with your number
+      final message = Uri.encodeComponent("Hello! I need help with my order.");
+      final url = "https://wa.me/$whatsapp?text=$message";
+
+      launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    },
+    icon: Image.asset(
+      'assets/icons/brands/whatsapp.png', // <-- add your icon
+      width: 24,
+      height: 24,
+       // ❗ makes PNG white, remove if you want original color
+    ),
+  ),  
+
         IconButton(icon: const Icon(Iconsax.notification, color: TColors.white), onPressed: () => Get.toNamed(TRoutes.notification)),
         const TCartCounterIcon(iconColor: TColors.white, counterBgColor: TColors.black, counterTextColor: TColors.white),
+         // WhatsApp Icon
+ 
       ],
       showActions: true,
       showSkipButton: false,

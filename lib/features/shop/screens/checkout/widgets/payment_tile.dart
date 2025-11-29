@@ -21,8 +21,17 @@ class TPaymentTile extends StatelessWidget {
       contentPadding: const EdgeInsets.all(0),
       onTap: () {
         controller.selectedPaymentMethod.value = paymentMethodModel;
-        Get.back();
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (Get.isOverlaysOpen) {
+            Get.closeCurrentSnackbar();
+          }
+          if(Navigator.of(Get.context !).canPop()) {
+            Get.back();
+          }
+        });
       },
+       
+      
       leading: TRoundedContainer(
         width: 60,
         height: 40,

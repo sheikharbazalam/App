@@ -60,7 +60,10 @@ class SignupController extends GetxController {
       // Register user in the Firebase Authentication & Save user data in the Firebase
       await AuthenticationRepository.instance.registerWithEmailAndPassword(email.text.trim(), password.text.trim());
 
-      final token = await TNotificationService.getToken();
+     // final token = await TNotificationService.getToken();
+     //my chnages
+          final token = await TNotificationService.getToken() ?? '';
+
 
       // Save Authenticated user data in the Firebase Firestore
       final newUser = UserModel(
@@ -97,7 +100,9 @@ class SignupController extends GetxController {
     } catch (e) {
       // Show some Generic Error to the user
       TFullScreenLoader.stopLoading();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title:TTexts.ohSnap.tr, message: e.toString());
+    });
     }
   }
 }

@@ -46,7 +46,10 @@ class AddressController extends GetxController {
       selectedAddress.value = addresses.firstWhere((element) => element.selectedAddress, orElse: () => AddressModel.empty());
       return addresses;
     } catch (e) {
+      
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title:TTexts.addressNotFound.tr, message: e.toString());
+      });
       return [];
     }
   }
@@ -70,7 +73,9 @@ class AddressController extends GetxController {
         selectedBillingAddress.value = newSelectedAddress;
       }
     } catch (e) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title: TTexts.errorInSelection.tr, message: e.toString());
+      });
     }
   }
 
@@ -128,7 +133,9 @@ class AddressController extends GetxController {
     } catch (e) {
       // Remove Loader
       TFullScreenLoader.stopLoading();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title: TTexts.addressNotFound.tr ,message: e.toString());
+      });
     }
   }
 
@@ -239,7 +246,9 @@ class AddressController extends GetxController {
     } catch (e) {
       // Remove Loader
       TFullScreenLoader.stopLoading();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       TLoaders.errorSnackBar(title:TTexts.errorUpdatedAddress.tr, message: e.toString());
+    });
     }
   }
 
