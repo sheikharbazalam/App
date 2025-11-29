@@ -3,12 +3,12 @@
 A new Flutter project.
 
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-|                                                                                                  |
-|                                   WELCOME TO [T_Store]                                           |  
+|                                               AZONE INSIGHT                                                   |
+|                                                                         |  
 |                                                                                                  |
 |    Greetings,                                                                                    |
 |                                                                                                  |
-|    We extend our sincere appreciation for your interest in [T_Store]. This repository            |
+|    We extend our sincere appreciation for your interest in A ZONE INSIGHT. This repository            |
 |    houses a robust e-commerce solution developed using the Flutter framework. Every line         |
 |    of code here reflects our commitment to quality, efficiency, and scalability.                 |
 |                                                                                                  |
@@ -16,7 +16,7 @@ A new Flutter project.
 |    solution even more industry-leading. Dive in, explore, and let's innovate together.           |
 |                                                                                                  |
 |    Regards,                                                                                      |
-|    Coding with T                                                                                 |
+|    AZONE INSIGHT                                                                                |
 |                                                                                                  |
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 
