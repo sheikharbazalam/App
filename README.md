@@ -1,4 +1,4 @@
-# t_store
+# AZONE INSIGHT
 
 A new Flutter project.
 
