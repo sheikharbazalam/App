@@ -23,7 +23,9 @@ class SignInController extends GetxController {
   /// Variables
   final localStorage = GetStorage();
   final phone = TextEditingController();
-  final selectedCountryCode = RxString('+225'); // Controller for selected country code
+  final selectedCountryCode = RxString(
+    '+225',
+  ); // Controller for selected country code
 
   GlobalKey<FormState> signInFormKey = GlobalKey<FormState>();
 
@@ -46,26 +48,40 @@ class SignInController extends GetxController {
       if (!signInFormKey.currentState!.validate()) return;
 
       // Show loading dialog
-      TFullScreenLoader.openLoadingDialog(TTexts.performingPhoneAuth, TImages.docerAnimation);
+      TFullScreenLoader.openLoadingDialog(
+        TTexts.performingPhoneAuth,
+        TImages.docerAnimation,
+      );
 
       // Check internet connectivity
       if (!await _checkInternetConnectivity()) return;
 
       // Format phone number with country code
-      String formattedPhoneNumber = TFormatter.formatPhoneNumberWithCountryCode(selectedCountryCode.value, phone.text.trim());
+      String formattedPhoneNumber = TFormatter.formatPhoneNumberWithCountryCode(
+        selectedCountryCode.value,
+        phone.text.trim(),
+      );
 
       // Send OTP to phone number
-      await AuthenticationRepository.instance.loginWithPhoneNo(formattedPhoneNumber);
+      await AuthenticationRepository.instance.loginWithPhoneNo(
+        formattedPhoneNumber,
+      );
 
       // Redirect to OTP screen for verification
       bool otpVerified = await Get.toNamed(
         TRoutes.otpVerification,
-        parameters: {'phoneNumberWithCountryCode': formattedPhoneNumber, 'phoneNumber': phone.text.trim()},
+        parameters: {
+          'phoneNumberWithCountryCode': formattedPhoneNumber,
+          'phoneNumber': phone.text.trim(),
+        },
       );
 
       if (otpVerified) {
         // Show success message if OTP is verified
-        TLoaders.successSnackBar(title: TTexts.phoneVerifiedTitle, message: TTexts.phoneVerifiedMessage);
+        TLoaders.successSnackBar(
+          title: TTexts.phoneVerifiedTitle,
+          message: TTexts.phoneVerifiedMessage,
+        );
 
         // Register new user in the Firestore, if not already registered.
         await UserController.instance.fetchUserRecord();
@@ -74,7 +90,9 @@ class SignInController extends GetxController {
         }
 
         // Redirect to the appropriate screen
-        await AuthenticationRepository.instance.screenRedirect(FirebaseAuth.instance.currentUser);
+        await AuthenticationRepository.instance.screenRedirect(
+          FirebaseAuth.instance.currentUser,
+        );
       } else {
         // Stop loading dialog
         TFullScreenLoader.stopLoading();
@@ -93,8 +111,11 @@ class SignInController extends GetxController {
     if (!isConnected) {
       TFullScreenLoader.stopLoading();
       WidgetsBinding.instance.addPostFrameCallback((_) {
-      TLoaders.errorSnackBar(title: TTexts.noInternet.tr, message: TTexts.checkInternetConnection.tr);
-    });
+        TLoaders.errorSnackBar(
+          title: TTexts.noInternet.tr,
+          message: TTexts.checkInternetConnection.tr,
+        );
+      });
       return false;
     }
     return true;
@@ -105,15 +126,14 @@ class SignInController extends GetxController {
     // Stop loading dialog and show error message
     TFullScreenLoader.stopLoading();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-    TLoaders.errorSnackBar(title: TTexts.ohSnap, message: e.toString());
-  });
+      TLoaders.errorSnackBar(title: TTexts.ohSnap, message: e.toString());
+    });
   }
 
   Future<void> registerUserInTheDatabase(String phoneNumber) async {
-   // final token = await TNotificationService.getToken();
-   //my chnages
-          final token = await TNotificationService.getToken() ?? '';
-
+    // final token = await TNotificationService.getToken();
+    //my chnages
+    final token = await TNotificationService.getToken() ?? '';
 
     // Save Authenticated user data in the Firebase Firestore
     final newUser = UserModel(
